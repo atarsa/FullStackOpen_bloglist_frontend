@@ -5,7 +5,7 @@ import loginService from './services/login'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm'
-
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +16,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const [message, setMessage] = useState('')
+  const [msgClasses, setMsgClasses] = useState('')
 
   useEffect(() => { 
     blogService
@@ -48,8 +51,12 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+
     } catch (e) {
-      console.log('Wrong creditionals');
+      setMessage('Wrong creditionals');
+      setMsgClasses('notification error')
+
+      hideNotificationMessage()
     }
   }
 
@@ -58,22 +65,44 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (e) => {
-    e.preventDefault()
-    const newBlog = {
-      title, author, url
+  const hideNotificationMessage = () => {
+    setTimeout(() => {
+      setMessage(null)
+      setMsgClasses('')
+    }, 5000)
+  }
+
+  const createBlog = async (event) => {
+    event.preventDefault()
+
+    try {
+      const newBlog = {
+        title, author, url
+      }
+      const returnedBlog = await blogService.create(newBlog)
+      
+      setBlogs(blogs.concat(returnedBlog))
+      
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+
+      setMessage(`a new blog ${title} by ${author} added`)
+      setMsgClasses('notification successful')
+      hideNotificationMessage()
+    } catch (e) {
+      setMessage(e.response.data)
+      setMsgClasses('notification error')
+      hideNotificationMessage()      
     }
-    const returnedBlog = await blogService.create(newBlog)
-    
-    setBlogs(blogs.concat(returnedBlog))
-    
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
     
   return (
     <div>
+      <Notification 
+        message={message}
+        className={msgClasses}  
+      />
       {user === null 
         ? <LoginForm 
             username={username}
