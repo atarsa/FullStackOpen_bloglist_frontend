@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Blog from './components/Blog'
-//import LoginForm from './components/LoginForm' 
 
 
 const App = () => {
@@ -20,22 +19,38 @@ const App = () => {
       })
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogsAppUser')
+    if (loggedUserJSON){
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login( { username, password
       })
 
+      window.localStorage.setItem(
+        'loggedBlogsAppUser', JSON.stringify(user)
+      )
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-
-
     } catch (e) {
       console.log('Wrong creditionals');
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogsAppUser')
+    setUser(null)
+  }
   const loginForm = () => (
     <>
       <h2>Log in to application</h2>
@@ -68,11 +83,13 @@ const App = () => {
       {user === null 
         ? loginForm() 
         : <div>
-           <h2>blogs</h2>
-            {blogs.map(blog =>
-               <Blog key={blog.id} blog={blog} />
-             )}
-    </div>
+            <p>{user.username} logged in</p>
+            <button onClick={handleLogout}>Log out</button>
+            <h2>blogs</h2>
+              {blogs.map(blog =>
+                <Blog key={blog.id} blog={blog} />
+              )}
+          </div>
         
       }
     </div>
