@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogForm = ({title, setTitle, author, setAuthor, url, setUrl, onSubmit}) => (
+const BlogForm = ({title, handleChangeTitle, author, handleChangeAuthor, url, handleChangeUrl, onSubmit}) => (
   <form onSubmit={onSubmit}>
     <h2>Create new</h2>
     <div>
@@ -9,7 +9,7 @@ const BlogForm = ({title, setTitle, author, setAuthor, url, setUrl, onSubmit}) =
         type="text"
         value={title}
         name="Title"
-        onChange={ ({target}) => setTitle(target.value)}
+        onChange={handleChangeTitle}
         />
     </div>
     <div>
@@ -18,7 +18,7 @@ const BlogForm = ({title, setTitle, author, setAuthor, url, setUrl, onSubmit}) =
         type="text"
         value={author}
         name="Author"
-        onChange={ ({target}) => setAuthor(target.value)}
+        onChange={handleChangeAuthor}
         />
     </div>
     <div>
@@ -27,7 +27,7 @@ const BlogForm = ({title, setTitle, author, setAuthor, url, setUrl, onSubmit}) =
         type="text"
         value={url}
         name="Url"
-        onChange={ ({target}) => setUrl(target.value)}
+        onChange={handleChangeUrl}
         />
     </div>
     <button type="submit">Create</button>
