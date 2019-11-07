@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,6 +22,8 @@ const App = () => {
 
   const [message, setMessage] = useState('')
   const [msgClasses, setMsgClasses] = useState('')
+
+  const blogFormRef = React.createRef()
 
   useEffect(() => { 
     blogService
@@ -74,6 +79,7 @@ const App = () => {
 
   const createBlog = async (event) => {
     event.preventDefault()
+    blogFormRef.current.toggleVisibility() // hide blog form on the creation of the new one
 
     try {
       const newBlog = {
@@ -106,23 +112,26 @@ const App = () => {
       {user === null 
         ? <LoginForm 
             username={username}
-            setUsername={setUsername}
+            handleChangeUsername={( {target} ) => setUsername(target.value)}
             password={password}
-            setPassword={setPassword}  
+            handleChangePassword={( {target} ) => setPassword(target.value)}  
             onSubmit={handleLogin}
           />
         : <div>
             <p>{user.username} logged in</p>
             <button onClick={handleLogout}>Log out</button>
-            <BlogForm 
-            title={title}
-            setTitle={setTitle}
-            author={author}
-            setAuthor={setAuthor}
-            url={url}
-            setUrl={setUrl}
-            onSubmit={createBlog}   
-            />
+            <Togglable buttonLabel="new blog" ref={blogFormRef}>
+              <BlogForm 
+                title={title}
+                handleChangeTitle={({target}) => setTitle(target.value)}
+                author={author}
+                handleChangeAuthor={({target}) => setAuthor(target.value)}
+                url={url}
+                handleChangeUrl={({target}) => setUrl(target.value)}
+                onSubmit={createBlog}   
+              />
+            </Togglable>
+            
             <h2>blogs</h2>
               {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />
