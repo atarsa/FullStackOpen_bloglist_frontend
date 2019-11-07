@@ -124,6 +124,27 @@ const App = () => {
       console.log(exception)
     }
   }
+
+  const deleteBlog = async (id) => {
+    console.log('blog to delete:', id);
+    try {
+      const blogToDelete = blogs.find(b => b.id === id)
+      
+      if (window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author}?`)){
+        await blogService.deleteBlog(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      }
+      
+      setMessage(`blog ${blogToDelete.title} by ${blogToDelete.author} removed`)
+      setMsgClasses('notification successful')
+      hideNotificationMessage()
+      
+    } catch (e) {
+      console.log('couldn\'t delete: ', e)
+    }
+    
+  }
+
   return (
     <div>
       <Notification 
@@ -157,11 +178,10 @@ const App = () => {
               {blogs.map(blog =>
                 <Blog key={blog.id} 
                   blog={blog}
-                  handleLikes={() => updateLikes(blog.id)}                 
+                  handleLikes={() => updateLikes(blog.id)}       handleDelete={() => deleteBlog(blog.id)}          
                 />
               )}
-          </div>        
-        
+         </div>   
       }
     </div>
   );
