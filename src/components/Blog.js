@@ -1,4 +1,5 @@
 import React, { useState, } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, user, handleLikes, handleDelete }) => {
   const blogStyle = {
@@ -15,25 +16,25 @@ const Blog = ({ blog, user, handleLikes, handleDelete }) => {
     borderRadius: 1
   }
 
-  const [isExpanded, setIsExpanded] = useState(false) 
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded)
-  } 
-  
+  }
+
   const showRemoveButton = () => {
     if (user === blog.user.username){
       return (
         <button onClick={handleDelete} style={btnStyle}>Remove</button>
       )
-    } 
+    }
   }
-  
+
   if (isExpanded){
     return (
       <div style={blogStyle}>
         <div onClick={() => {
-          console.log(blog);
+          console.log(blog)
           toggleExpansion()}}>
           {blog.title} {blog.author}
           <br/>
@@ -43,21 +44,27 @@ const Blog = ({ blog, user, handleLikes, handleDelete }) => {
           <br />
           added by {blog.user.name ? blog.user.name : blog.user.username }
         </div>
-       {showRemoveButton()}
-        
+        {showRemoveButton()}
+
       </div>
     )
   }
 
   return (
 
-  <div style={blogStyle}>
-    <div onClick={toggleExpansion}>
-      {blog.title} {blog.author}
+    <div style={blogStyle}>
+      <div onClick={toggleExpansion}>
+        {blog.title} {blog.author}
+      </div>
+
     </div>
-    
-  </div>
   )
 }
 
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  user: PropTypes.string.isRequired,
+  handleLikes: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
+}
 export default Blog
