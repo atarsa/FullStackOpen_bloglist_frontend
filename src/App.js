@@ -29,7 +29,9 @@ const App = () => {
     blogService
       .getAll()
       .then(initialBlogs => {
-        setBlogs(initialBlogs)
+        setBlogs(initialBlogs.sort((a,b) => {
+          return b.likes - a.likes
+        }))
       })
   }, [])
 
@@ -114,7 +116,9 @@ const App = () => {
       }
       const returnedBlog = await blogService.update(id, updatedBlog)
 
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog).sort((a,b) => {
+        return b.likes - a.likes
+      }))
       
     } catch (exception) {
       console.log(exception)
