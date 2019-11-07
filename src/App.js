@@ -178,7 +178,8 @@ const App = () => {
               {blogs.map(blog =>
                 <Blog key={blog.id} 
                   blog={blog}
-                  handleLikes={() => updateLikes(blog.id)}       handleDelete={() => deleteBlog(blog.id)}          
+                  user={user.username}  
+                  handleLikes={() => updateLikes(blog.id)}       handleDelete={() => deleteBlog(blog.id)} 
                 />
               )}
          </div>   

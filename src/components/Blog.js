@@ -1,6 +1,6 @@
 import React, { useState, } from 'react'
 
-const Blog = ({ blog, handleLikes, handleDelete }) => {
+const Blog = ({ blog, user, handleLikes, handleDelete }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,13 +17,24 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
 
   const [isExpanded, setIsExpanded] = useState(false) 
 
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded)
+  } 
+  
+  const showRemoveButton = () => {
+    if (user === blog.user.username){
+      return (
+        <button onClick={handleDelete} style={btnStyle}>Remove</button>
+      )
+    } 
+  }
   
   if (isExpanded){
     return (
       <div style={blogStyle}>
         <div onClick={() => {
-            
-            setIsExpanded(!isExpanded)}}>
+          console.log(blog);
+          toggleExpansion()}}>
           {blog.title} {blog.author}
           <br/>
           {blog.url}
@@ -32,7 +43,8 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
           <br />
           added by {blog.user.name ? blog.user.name : blog.user.username }
         </div>
-        <button onClick={handleDelete} style={btnStyle}>Remove</button>
+       {showRemoveButton()}
+        
       </div>
     )
   }
@@ -40,7 +52,7 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
   return (
 
   <div style={blogStyle}>
-    <div onClick={() => setIsExpanded(!isExpanded)}>
+    <div onClick={toggleExpansion}>
       {blog.title} {blog.author}
     </div>
     
