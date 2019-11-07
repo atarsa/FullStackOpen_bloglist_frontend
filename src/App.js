@@ -19,7 +19,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-
+  
   const [message, setMessage] = useState('')
   const [msgClasses, setMsgClasses] = useState('')
 
@@ -77,6 +77,7 @@ const App = () => {
     }, 5000)
   }
 
+  
   const createBlog = async (event) => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility() // hide blog form on the creation of the new one
@@ -134,7 +135,9 @@ const App = () => {
             
             <h2>blogs</h2>
               {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} 
+                  blog={blog}                 
+                />
               )}
           </div>        
         
