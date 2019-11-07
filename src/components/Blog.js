@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLikes }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -11,17 +11,18 @@ const Blog = ({ blog }) => {
 
   const [isExpanded, setIsExpanded] = useState(false) 
 
+  
   if (isExpanded){
     return (
       <div style={blogStyle}>
         <div onClick={() => {
-            console.log(blog);
+            
             setIsExpanded(!isExpanded)}}>
           {blog.title} {blog.author}
           <br/>
           {blog.url}
           <br />
-          {blog.likes} likes <button>like</button>
+          {blog.likes} likes <button onClick={handleLikes}>like</button>
           <br />
           added by {blog.user.name ? blog.user.name : blog.user.username }
         </div>

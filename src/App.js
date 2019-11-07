@@ -103,7 +103,23 @@ const App = () => {
       hideNotificationMessage()      
     }
   }
-    
+  
+  const updateLikes = async (id) => {
+    try {
+      const blog = blogs.find(b => b.id === id)
+
+      const updatedBlog = { 
+        ...blog,
+        likes: blog.likes + 1        
+      }
+      const returnedBlog = await blogService.update(id, updatedBlog)
+
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
   return (
     <div>
       <Notification 
@@ -136,7 +152,8 @@ const App = () => {
             <h2>blogs</h2>
               {blogs.map(blog =>
                 <Blog key={blog.id} 
-                  blog={blog}                 
+                  blog={blog}
+                  handleLikes={() => updateLikes(blog.id)}                 
                 />
               )}
           </div>        
