@@ -32,8 +32,8 @@ const Blog = ({ blog, user, handleLikes, handleDelete }) => {
 
   if (isExpanded){
     return (
-      <div style={blogStyle}>
-        <div onClick={() => {
+      <div style={blogStyle} >
+        <div className='blog' onClick={() => {
           console.log(blog)
           toggleExpansion()}}>
           {blog.title} {blog.author}
@@ -52,8 +52,8 @@ const Blog = ({ blog, user, handleLikes, handleDelete }) => {
 
   return (
 
-    <div style={blogStyle}>
-      <div onClick={toggleExpansion}>
+    <div style={blogStyle} >
+      <div onClick={toggleExpansion} className='blog'>
         {blog.title} {blog.author}
       </div>
 
