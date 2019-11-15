@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import { useField } from './hooks'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,10 +12,11 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('password')
   const [user, setUser] = useState(null)
 
   const [title, setTitle] = useState('')
@@ -48,7 +51,9 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login( { username, password
+      const user = await loginService.login( {
+        username: username.value,
+        password: password.value
       })
 
       window.localStorage.setItem(
@@ -56,8 +61,8 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
 
     } catch (e) {
       setMessage('Wrong creditionals')
@@ -154,9 +159,9 @@ const App = () => {
       {user === null
         ? <LoginForm
           username={username}
-          handleChangeUsername={( { target } ) => setUsername(target.value)}
+
           password={password}
-          handleChangePassword={( { target } ) => setPassword(target.value)}
+
           onSubmit={handleLogin}
         />
         : <div>
